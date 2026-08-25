@@ -9,9 +9,7 @@ import { createCharacterSelectScreen } from "./characterSelectScreen.js";
 
 export function createMenuScreen() {
 
-    const screen =
-        document.createElement("div");
-
+    const screen = document.createElement("div");
 
     screen.id = "menu-screen";
 
@@ -22,43 +20,57 @@ export function createMenuScreen() {
 
         <h1>MI ROGUELIKE</h1>
 
-        <button id="new-game">
-            Nueva partida
-        </button>
+        <div class="menu-buttons">
 
-        <button id="continue-game">
-            Continuar partida
-        </button>
+            <button id="new-game">
+                Nueva partida
+            </button>
+
+            <button id="continue-game">
+                Continuar partida
+            </button>
+
+        </div>
 
     `;
 
 
-    // Nueva partida
+    // ========================================
+    // NUEVA PARTIDA
+    // ========================================
 
-    screen
-        .querySelector("#new-game")
-        .addEventListener("click", () => {
-
-            resetGameState();
-
-            showScreen(
-                createCharacterSelectScreen()
-            );
-
-        });
+    const newGameButton =
+        screen.querySelector("#new-game");
 
 
-    // Continuar
+    newGameButton.addEventListener("click", () => {
 
-    screen
-        .querySelector("#continue-game")
-        .addEventListener("click", () => {
+        console.log("Nueva partida");
 
-            console.log(
-                "Continuar partida"
-            );
+        // Reiniciar estado
+        resetGameState();
 
-        });
+        // Ir a selección de personaje
+        showScreen(
+            createCharacterSelectScreen()
+        );
+
+    });
+
+
+    // ========================================
+    // CONTINUAR PARTIDA
+    // ========================================
+
+    const continueButton =
+        screen.querySelector("#continue-game");
+
+
+    continueButton.addEventListener("click", () => {
+
+        console.log("Continuar partida");
+
+    });
 
 
     return screen;
