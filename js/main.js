@@ -1,10 +1,11 @@
 import { showScreen } from "./screens/screenManager.js";
-
 import { createMenuScreen } from "./screens/menuScreen.js";
 
 
-const menu =
-    createMenuScreen();
+// ========================================
+// INICIAR JUEGO
+// ========================================
 
+const menuScreen = createMenuScreen();
 
-showScreen(menu);
+showScreen(menuScreen);
