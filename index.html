@@ -9,39 +9,21 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Mi Juego</title>
+    <title>Mi Roguelike</title>
 
-    <link rel="stylesheet" href="./css/global.css">
+    <link
+        rel="stylesheet"
+        href="./css/global.css"
+    >
 </head>
 
 <body>
 
-    <div id="game">
-
-        <div id="menu">
-
-            <h1>MI JUEGO</h1>
-
-            <button id="new-game">
-                Nueva partida
-            </button>
-
-            <button id="continue-game">
-                Continuar partida
-            </button>
-
-        </div>
+    <!-- Contenedor principal del juego -->
+    <div id="game"></div>
 
 
-        <!--
-            Aquí aparecerán las demás pantallas.
-        -->
-
-        <div id="screen-container"></div>
-
-    </div>
-
-
+    <!-- Punto de entrada de JavaScript -->
     <script
         type="module"
         src="./js/main.js"
