@@ -1,29 +1,26 @@
 import { gameState } from "../gameState.js";
-
 import { showScreen } from "./screenManager.js";
-
 import { createMenuScreen } from "./menuScreen.js";
+import { createMapScreen } from "./mapScreen.js";
 
+
+// ========================================
+// CREAR PANTALLA DE SELECCIÓN
+// ========================================
 
 export function createCharacterSelectScreen() {
 
-    const screen =
-        document.createElement("div");
+    const screen = document.createElement("div");
 
-
-    screen.id =
-        "character-select-screen";
-
-
+    screen.id = "character-select-screen";
     screen.classList.add("screen");
-
 
     screen.innerHTML = `
 
-        <h2>Elige tu personaje</h2>
+        <h1>Elige tu personaje</h1>
 
         <div id="characters-container">
-            Cargando personajes...
+            <p>Cargando personajes...</p>
         </div>
 
         <button id="back-to-menu">
@@ -32,6 +29,10 @@ export function createCharacterSelectScreen() {
 
     `;
 
+
+    // ========================================
+    // BOTÓN VOLVER
+    // ========================================
 
     screen
         .querySelector("#back-to-menu")
@@ -44,6 +45,10 @@ export function createCharacterSelectScreen() {
         });
 
 
+    // ========================================
+    // CARGAR PERSONAJES
+    // ========================================
+
     loadCharacters(screen);
 
 
@@ -52,28 +57,28 @@ export function createCharacterSelectScreen() {
 
 
 // ========================================
-// CARGAR PERSONAJES
+// CARGAR CHARACTERS.JSON
 // ========================================
 
 async function loadCharacters(screen) {
 
     try {
 
-        const response =
-            await fetch(
-                "./data/characters.json"
-            );
+        const response = await fetch(
+            "./data/characters.json"
+        );
 
 
         if (!response.ok) {
+
             throw new Error(
                 "No se pudo cargar characters.json"
             );
+
         }
 
 
-        const data =
-            await response.json();
+        const data = await response.json();
 
 
         renderCharacters(
@@ -84,13 +89,21 @@ async function loadCharacters(screen) {
 
     } catch (error) {
 
-        console.error(error);
+        console.error(
+            "Error cargando personajes:",
+            error
+        );
 
-        screen.querySelector(
-            "#characters-container"
-        ).innerHTML = `
+
+        const container =
+            screen.querySelector(
+                "#characters-container"
+            );
+
+
+        container.innerHTML = `
             <p>
-                Error cargando personajes.
+                No se pudieron cargar los personajes.
             </p>
         `;
 
@@ -119,9 +132,11 @@ function renderCharacters(
 
     characters.forEach(character => {
 
-        container.appendChild(
-            createCharacterCard(character)
-        );
+        const card =
+            createCharacterCard(character);
+
+
+        container.appendChild(card);
 
     });
 
@@ -129,7 +144,7 @@ function renderCharacters(
 
 
 // ========================================
-// TARJETA
+// CREAR TARJETA DE PERSONAJE
 // ========================================
 
 function createCharacterCard(character) {
@@ -145,9 +160,9 @@ function createCharacterCard(character) {
 
     card.innerHTML = `
 
-        <h3>
+        <h2>
             ${character.name}
-        </h3>
+        </h2>
 
         <p>
             ${character.description}
@@ -158,22 +173,27 @@ function createCharacterCard(character) {
         </p>
 
         <p>
-            ❤️ ${character.maxHp}
+            Vida: ${character.maxHp}
         </p>
 
-        <button>
+        <button class="select-character">
             Elegir
         </button>
 
     `;
 
 
+    // ========================================
+    // BOTÓN ELEGIR
+    // ========================================
+
     card
-        .querySelector("button")
-        .addEventListener(
-            "click",
-            () => selectCharacter(character)
-        );
+        .querySelector(".select-character")
+        .addEventListener("click", () => {
+
+            selectCharacter(character);
+
+        });
 
 
     return card;
@@ -181,11 +201,12 @@ function createCharacterCard(character) {
 
 
 // ========================================
-// SELECCIONAR
+// SELECCIONAR PERSONAJE
 // ========================================
 
 function selectCharacter(character) {
 
+    // Guardamos el personaje en el estado
     gameState.player = {
 
         id: character.id,
@@ -206,6 +227,15 @@ function selectCharacter(character) {
     console.log(
         "Personaje seleccionado:",
         gameState.player
+    );
+
+
+    // ========================================
+    // PASAR AL MAPA
+    // ========================================
+
+    showScreen(
+        createMapScreen()
     );
 
 }
