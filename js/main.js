@@ -1,6 +1,9 @@
 import {
-    showScreen,
-    showMenu
+    resetGameState
+} from "./gameState.js";
+
+import {
+    showScreen
 } from "./screens/screenManager.js";
 
 
@@ -11,20 +14,18 @@ const continueButton =
     document.getElementById("continue-game");
 
 
-// ========================================
-// NUEVA PARTIDA
-// ========================================
+// Nueva partida
 
 newGameButton.addEventListener("click", () => {
 
-    console.log("Nueva partida");
+    resetGameState();
+
+    console.log("Nueva partida iniciada");
 
 });
 
 
-// ========================================
-// CONTINUAR PARTIDA
-// ========================================
+// Continuar partida
 
 continueButton.addEventListener("click", () => {
 
