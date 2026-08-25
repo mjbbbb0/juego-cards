@@ -1,16 +1,19 @@
 import { gameState } from "../gameState.js";
+
 import { showScreen } from "./screenManager.js";
 
+import { createMenuScreen } from "./menuScreen.js";
 
-// ========================================
-// CREAR PANTALLA
-// ========================================
 
 export function createCharacterSelectScreen() {
 
-    const screen = document.createElement("div");
+    const screen =
+        document.createElement("div");
 
-    screen.id = "character-select-screen";
+
+    screen.id =
+        "character-select-screen";
+
 
     screen.classList.add("screen");
 
@@ -30,18 +33,16 @@ export function createCharacterSelectScreen() {
     `;
 
 
-    // Botón volver
-
     screen
         .querySelector("#back-to-menu")
         .addEventListener("click", () => {
 
-            showScreen(createMenuScreen());
+            showScreen(
+                createMenuScreen()
+            );
 
         });
 
-
-    // Cargar personajes
 
     loadCharacters(screen);
 
@@ -51,7 +52,7 @@ export function createCharacterSelectScreen() {
 
 
 // ========================================
-// CARGAR JSON
+// CARGAR PERSONAJES
 // ========================================
 
 async function loadCharacters(screen) {
@@ -59,15 +60,15 @@ async function loadCharacters(screen) {
     try {
 
         const response =
-            await fetch("./data/characters.json");
+            await fetch(
+                "./data/characters.json"
+            );
 
 
         if (!response.ok) {
-
             throw new Error(
                 "No se pudo cargar characters.json"
             );
-
         }
 
 
@@ -85,19 +86,16 @@ async function loadCharacters(screen) {
 
         console.error(error);
 
-        const container =
-            screen.querySelector(
-                "#characters-container"
-            );
-
-
-        container.innerHTML = `
+        screen.querySelector(
+            "#characters-container"
+        ).innerHTML = `
             <p>
-                Error cargando los personajes.
+                Error cargando personajes.
             </p>
         `;
 
     }
+
 }
 
 
@@ -105,7 +103,10 @@ async function loadCharacters(screen) {
 // MOSTRAR PERSONAJES
 // ========================================
 
-function renderCharacters(screen, characters) {
+function renderCharacters(
+    screen,
+    characters
+) {
 
     const container =
         screen.querySelector(
@@ -118,11 +119,9 @@ function renderCharacters(screen, characters) {
 
     characters.forEach(character => {
 
-        const card =
-            createCharacterCard(character);
-
-
-        container.appendChild(card);
+        container.appendChild(
+            createCharacterCard(character)
+        );
 
     });
 
@@ -130,7 +129,7 @@ function renderCharacters(screen, characters) {
 
 
 // ========================================
-// CREAR TARJETA
+// TARJETA
 // ========================================
 
 function createCharacterCard(character) {
@@ -159,7 +158,7 @@ function createCharacterCard(character) {
         </p>
 
         <p>
-            Vida: ${character.maxHp}
+            ❤️ ${character.maxHp}
         </p>
 
         <button>
@@ -182,7 +181,7 @@ function createCharacterCard(character) {
 
 
 // ========================================
-// SELECCIONAR PERSONAJE
+// SELECCIONAR
 // ========================================
 
 function selectCharacter(character) {
@@ -208,11 +207,5 @@ function selectCharacter(character) {
         "Personaje seleccionado:",
         gameState.player
     );
-
-
-    // De momento nos quedamos aquí.
-    // Más adelante:
-    //
-    // showScreen(createMapScreen());
 
 }
