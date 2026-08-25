@@ -1,0 +1,25 @@
+{
+    "characters": [
+        {
+            "id": "char_001",
+            "name": "Projo",
+            "description": "Un luchador resistente que domina el combate cuerpo a cuerpo.",
+            "color": "Rojo",
+            "maxHp": 80
+        },
+        {
+            "id": "char_002",
+            "name": "PVerde",
+            "description": "Rápido y letal. Utiliza ataques consecutivos y efectos de veneno.",
+            "color": "Verde",
+            "maxHp": 65
+        },
+        {
+            "id": "char_003",
+            "name": "PAzul",
+            "description": "Un poderoso hechicero que utiliza cartas mágicas.",
+            "color": "Azul",
+            "maxHp": 55
+        }
+    ]
+}
