@@ -1,21 +1,28 @@
-export function createMapScreen() {
+import { gameState } from "../gameState.js";
 
-    const screen = document.createElement("div");
+export function showMapScreen() {
 
-    screen.id = "map-screen";
-    screen.classList.add("screen");
+    const app = document.getElementById("app");
 
-    screen.innerHTML = `
+    const map = gameState.maps.act1;
 
-        <h1>Mapa</h1>
+    app.innerHTML = `
+        <div class="map-debug">
 
-        <p>Bienvenido a la aventura.</p>
+            <h1>Mapa - Acto 1</h1>
 
-        <div id="map-container">
-            <!-- Aquí construiremos el mapa -->
+            <p>
+                Seed:
+                ${gameState.runSeed}
+            </p>
+
+            <p>
+                Bioma:
+                ${gameState.biomes.act1}
+            </p>
+
+            <pre>${JSON.stringify(map, null, 4)}</pre>
+
         </div>
-
     `;
-
-    return screen;
 }
