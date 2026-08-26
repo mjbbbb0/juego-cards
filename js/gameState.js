@@ -1,44 +1,61 @@
+import { generateRunSeed } from "./rng/seedManager.js";
+
+
 export const gameState = {
 
-    // Partida
-    isGameStarted: false,
-    floor: 1,
+    runSeed: null,
+
     act: 1,
 
-    // Personaje
+    biomes: {
+        act1: null,
+        act2: null,
+        act3: null
+    },
+
+    maps: {
+        act1: null,
+        act2: null,
+        act3: null
+    },
+
     player: null,
 
-    // Mazo
-    deck: [],
-    drawPile: [],
-    discardPile: [],
-
-    // Reliquias
-    relics: [],
-
-    // Mapa
-    map: null,
     currentNode: null
 
 };
 
 
-// Reiniciar estado para una nueva partida
+// ========================================
+// NUEVA PARTIDA
+// ========================================
+
 export function resetGameState() {
 
-    gameState.isGameStarted = true;
+    gameState.runSeed = generateRunSeed();
 
-    gameState.floor = 1;
     gameState.act = 1;
+
+    gameState.biomes = {
+        act1: null,
+        act2: null,
+        act3: null
+    };
+
+    gameState.maps = {
+        act1: null,
+        act2: null,
+        act3: null
+    };
 
     gameState.player = null;
 
-    gameState.deck = [];
-    gameState.drawPile = [];
-    gameState.discardPile = [];
-
-    gameState.relics = [];
-
-    gameState.map = null;
     gameState.currentNode = null;
+
+
+    console.log(
+        "Nueva partida. Seed:",
+        gameState.runSeed
+    );
+
 }
