@@ -1,85 +1,224 @@
+import { gameState } from "../../gameState.js";
+import { generateMap } from "../../map/mapGenerator.js";
+import { Random } from "../../rng/random.js";
+
+
 export class MapView {
-
-    constructor(gameScreen) {
-
-        this.gameScreen = gameScreen;
-
-    }
-
 
     render(container) {
 
-        container.innerHTML = `
+        const random =
+            new Random(
+                gameState.seed
+            );
+
+
+        const map =
+            generateMap(
+                random,
+                gameState.currentAct,
+                gameState.currentBiome
+            );
+
+
+        gameState.map = map;
+
+
+        let html = `
 
             <div class="map-view">
 
-                <h1>Mapa</h1>
+                <h2>
+                    Mapa
+                </h2>
 
                 <p>
-                    Este será el mapa de la partida.
+                    Seed: ${gameState.seed}
                 </p>
 
-                <div class="map-test-buttons">
+                <p>
+                    Acto: ${map.act}
+                </p>
 
-                    <button id="combatButton">
-                        Combate
-                    </button>
+                <p>
+                    Bioma: ${map.biome}
+                </p>
 
-                    <button id="shopButton">
-                        Tienda
-                    </button>
+                <hr>
 
-                    <button id="eventButton">
-                        Evento
-                    </button>
+        `;
+
+
+        // Mostrar pisos de arriba hacia abajo
+
+        for (
+            let row = map.rows;
+            row >= 1;
+            row--
+        ) {
+
+            html += `
+
+                <div class="map-floor">
+
+                    <strong>
+                        Piso ${row}
+                    </strong>
+
+                    <div>
+            `;
+
+
+            const nodes =
+                map.nodes.filter(
+                    node =>
+                        node.row === row
+                );
+
+
+            for (
+                let column = 0;
+                column < map.columns;
+                column++
+            ) {
+
+                const node =
+                    nodes.find(
+                        node =>
+                            node.column === column
+                    );
+
+
+                if (!node) {
+
+                    html += `
+                        <span>
+                            &nbsp;&nbsp;&nbsp;
+                        </span>
+                    `;
+
+                    continue;
+
+                }
+
+
+                html += `
+
+                    <span
+                        style="
+                            display:inline-block;
+                            width:40px;
+                            text-align:center;
+                        "
+                    >
+                        ${getNodeSymbol(node.type)}
+                    </span>
+
+                `;
+
+            }
+
+
+            html += `
+
+                    </div>
 
                 </div>
+
+            `;
+
+        }
+
+
+        html += `
+
+                <hr>
+
+                <h3>
+                    Conexiones
+                </h3>
+
+        `;
+
+
+        for (
+            const node of map.nodes
+        ) {
+
+            if (
+                node.connections.length === 0
+            ) {
+
+                continue;
+
+            }
+
+
+            html += `
+
+                <p>
+
+                    ${node.id}
+
+                    →
+
+                    ${node.connections.join(", ")}
+
+                </p>
+
+            `;
+
+        }
+
+
+        html += `
+
+                <hr>
+
+                <p>
+                    Jefe: ${map.boss?.id}
+                </p>
 
             </div>
 
         `;
 
 
-        const combatButton =
-            document.getElementById("combatButton");
+        container.innerHTML =
+            html;
+
+    }
+
+}
 
 
-        combatButton.addEventListener(
-            "click",
-            () => {
+function getNodeSymbol(type) {
 
-                this.gameScreen.showCombat();
+    switch (type) {
 
-            }
-        );
+        case "combat":
+            return "⚔️";
 
+        case "event":
+            return "?";
 
-        const shopButton =
-            document.getElementById("shopButton");
+        case "elite":
+            return "☠️";
 
+        case "rest":
+            return "🔥";
 
-        shopButton.addEventListener(
-            "click",
-            () => {
+        case "shop":
+            return "$";
 
-                this.gameScreen.showShop();
+        case "treasure":
+            return "💎";
 
-            }
-        );
+        case "chest":
+            return "📦";
 
-
-        const eventButton =
-            document.getElementById("eventButton");
-
-
-        eventButton.addEventListener(
-            "click",
-            () => {
-
-                this.gameScreen.showEvent();
-
-            }
-        );
+        default:
+            return "○";
 
     }
 
