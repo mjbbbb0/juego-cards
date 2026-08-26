@@ -1,12 +1,42 @@
 export const gameState = {
 
-    // Personaje seleccionado
+    // =========================
+    // JUGADOR
+    // =========================
 
     player: null,
 
 
-    // Dinero
+    // =========================
+    // PARTIDA
+    // =========================
 
-    gold: 100
+    gold: 0,
+
+    currentAct: 1,
+
+    currentBiome: null,
+
+    currentNode: null,
+
+
+    // =========================
+    // MAPA
+    // =========================
+
+    seed: null,
+
+    map: null,
+
+
+    // =========================
+    // INVENTARIO
+    // =========================
+
+    deck: [],
+
+    relics: [],
+
+    potions: []
 
 };
