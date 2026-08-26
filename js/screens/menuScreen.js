@@ -1,8 +1,12 @@
+import { CharacterSelectScreen } from "./characterSelectScreen.js";
+
+
 export class MenuScreen {
 
     constructor(screenManager) {
 
-        this.screenManager = screenManager;
+        this.screenManager =
+            screenManager;
 
     }
 
@@ -13,7 +17,9 @@ export class MenuScreen {
 
             <div class="menu-screen">
 
-                <h1>Mi Roguelike</h1>
+                <h1>
+                    Mi Roguelike
+                </h1>
 
                 <button id="newGameButton">
                     Nueva partida
@@ -28,6 +34,8 @@ export class MenuScreen {
         `;
 
 
+        // Botón Nueva partida
+
         const newGameButton =
             document.getElementById(
                 "newGameButton"
@@ -38,21 +46,35 @@ export class MenuScreen {
             "click",
             () => {
 
-                // Importaremos esta pantalla después
+                const characterScreen =
+                    new CharacterSelectScreen(
+                        this.screenManager
+                    );
 
-                import("./characterSelectScreen.js")
-                    .then(module => {
 
-                        const screen =
-                            new module.CharacterSelectScreen(
-                                this.screenManager
-                            );
+                this.screenManager.show(
+                    characterScreen
+                );
 
-                        this.screenManager.show(
-                            screen
-                        );
+            }
+        );
 
-                    });
+
+        // Botón Continuar
+
+        const continueButton =
+            document.getElementById(
+                "continueButton"
+            );
+
+
+        continueButton.addEventListener(
+            "click",
+            () => {
+
+                console.log(
+                    "Continuar partida todavía no está implementado."
+                );
 
             }
         );
