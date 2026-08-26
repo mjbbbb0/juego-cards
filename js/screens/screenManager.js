@@ -1,22 +1,20 @@
-let currentScreen = null;
+export class ScreenManager {
 
-const game = document.getElementById("game");
+    constructor(container) {
 
+        this.container = container;
 
-// ========================================
-// MOSTRAR PANTALLA
-// ========================================
+        this.currentScreen = null;
 
-export function showScreen(screen) {
-
-    // Eliminar pantalla actual
-    if (currentScreen) {
-        currentScreen.remove();
     }
 
-    // Añadir nueva pantalla
-    game.appendChild(screen);
 
-    // Guardar pantalla actual
-    currentScreen = screen;
+    show(screen) {
+
+        this.currentScreen = screen;
+
+        screen.render(this.container);
+
+    }
+
 }
