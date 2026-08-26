@@ -1,3 +1,6 @@
+import { CharacterSelectScreen } from "./characterSelectScreen.js";
+
+
 export class MenuScreen {
 
     constructor(screenManager) {
@@ -6,21 +9,70 @@ export class MenuScreen {
 
     }
 
+
     render(container) {
 
         container.innerHTML = `
 
-            <h1>Mi Roguelike</h1>
+            <div class="menu-screen">
 
-            <button id="newGameButton">
-                Nueva partida
-            </button>
+                <h1>
+                    Mi Roguelike
+                </h1>
 
-            <button id="continueButton">
-                Continuar partida
-            </button>
+                <button id="newGameButton">
+                    Nueva partida
+                </button>
+
+                <button id="continueButton">
+                    Continuar partida
+                </button>
+
+            </div>
 
         `;
+
+
+        const newGameButton =
+            document.getElementById(
+                "newGameButton"
+            );
+
+
+        newGameButton.addEventListener(
+            "click",
+            () => {
+
+                const characterScreen =
+                    new CharacterSelectScreen(
+                        this.screenManager
+                    );
+
+
+                this.screenManager.show(
+                    characterScreen
+                );
+
+            }
+        );
+
+
+        const continueButton =
+            document.getElementById(
+                "continueButton"
+            );
+
+
+        continueButton.addEventListener(
+            "click",
+            () => {
+
+                console.log(
+                    "Continuar partida"
+                );
+
+            }
+        );
 
     }
 
