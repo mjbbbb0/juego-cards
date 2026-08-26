@@ -1,77 +1,62 @@
-import { resetGameState } from "../gameState.js";
-import { showScreen } from "./screenManager.js";
-import { createCharacterSelectScreen } from "./characterSelectScreen.js";
+export class MenuScreen {
+
+    constructor(screenManager) {
+
+        this.screenManager = screenManager;
+
+    }
 
 
-// ========================================
-// CREAR MENÚ
-// ========================================
+    render(container) {
 
-export function createMenuScreen() {
+        container.innerHTML = `
 
-    const screen = document.createElement("div");
+            <div class="menu-screen">
 
-    screen.id = "menu-screen";
+                <h1>Mi Roguelike</h1>
 
-    screen.classList.add("screen");
+                <button id="newGameButton">
+                    Nueva partida
+                </button>
 
+                <button id="continueButton">
+                    Continuar partida
+                </button>
 
-    screen.innerHTML = `
+            </div>
 
-        <h1>MI ROGUELIKE</h1>
-
-        <div class="menu-buttons">
-
-            <button id="new-game">
-                Nueva partida
-            </button>
-
-            <button id="continue-game">
-                Continuar partida
-            </button>
-
-        </div>
-
-    `;
+        `;
 
 
-    // ========================================
-    // NUEVA PARTIDA
-    // ========================================
-
-    const newGameButton =
-        screen.querySelector("#new-game");
+        const newGameButton =
+            document.getElementById(
+                "newGameButton"
+            );
 
 
-    newGameButton.addEventListener("click", () => {
+        newGameButton.addEventListener(
+            "click",
+            () => {
 
-        console.log("Nueva partida");
+                // Importaremos esta pantalla después
 
-        // Reiniciar estado
-        resetGameState();
+                import("./characterSelectScreen.js")
+                    .then(module => {
 
-        // Ir a selección de personaje
-        showScreen(
-            createCharacterSelectScreen()
+                        const screen =
+                            new module.CharacterSelectScreen(
+                                this.screenManager
+                            );
+
+                        this.screenManager.show(
+                            screen
+                        );
+
+                    });
+
+            }
         );
 
-    });
+    }
 
-
-    // ========================================
-    // CONTINUAR PARTIDA
-    // ========================================
-
-    const continueButton =
-        screen.querySelector("#continue-game");
-
-
-    continueButton.addEventListener("click", () => {
-
-        console.log("Continuar partida");
-
-    });
-
-
-    return screen;
 }
