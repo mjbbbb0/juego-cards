@@ -10,7 +10,7 @@ export const gameState = {
 
     currentNode: null,
 
-    currentView: "map",
+    currentView: null,
 
     seed: null,
 
