@@ -1,10 +1,6 @@
-import { ScreenManager } from "./screens/ScreenManager.js";
-import { MenuScreen } from "./screens/menuScreen.js";
-
 const app = document.getElementById("app");
 
-const screenManager = new ScreenManager(app);
-
-const menuScreen = new MenuScreen(screenManager);
-
-screenManager.show(menuScreen);
+app.innerHTML = `
+    <h1>Mi Roguelike</h1>
+    <p>main.js funciona.</p>
+`;
