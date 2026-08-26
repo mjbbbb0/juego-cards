@@ -13,6 +13,8 @@ export class ScreenManager {
 
         this.currentScreen = screen;
 
+        this.container.innerHTML = "";
+
         screen.render(this.container);
 
     }
