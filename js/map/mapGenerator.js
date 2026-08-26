@@ -6,16 +6,29 @@ import { mapConfig } from "./mapConfig.js";
 // MAP GENERATOR
 // ============================================================
 //
-// El mapa NO genera su propia seed.
+// IMPORTANTE:
 //
-// Recibe un Random ya inicializado con la seed de la partida:
+// MapGenerator NO genera una seed.
+//
+// Recibe un Random que ya ha sido creado con la seed de la
+// partida.
+//
+// Ejemplo:
 //
 // const random = new Random(gameState.seed);
 //
-// generateMap(random, act, biome);
+// const map = generateMap(
+//     random,
+//     gameState.currentAct,
+//     gameState.currentBiome
+// );
 //
 // ============================================================
 
+
+// ============================================================
+// GENERAR MAPA
+// ============================================================
 
 export function generateMap(
     random,
@@ -41,14 +54,14 @@ export function generateMap(
 
 
     // --------------------------------------------------------
-    // 1. Crear Grid 7 x 15
+    // 1. Crear Grid
     // --------------------------------------------------------
 
     createGrid(map);
 
 
     // --------------------------------------------------------
-    // 2. Generar las 6 rutas
+    // 2. Generar las rutas
     // --------------------------------------------------------
 
     generatePaths(
@@ -58,7 +71,7 @@ export function generateMap(
 
 
     // --------------------------------------------------------
-    // 3. Eliminar habitaciones que no tienen caminos
+    // 3. Eliminar nodos que no forman parte de ninguna ruta
     // --------------------------------------------------------
 
     removeDisconnectedNodes(map);
@@ -82,6 +95,22 @@ export function generateMap(
         map,
         random
     );
+
+
+    // --------------------------------------------------------
+    // 6. Validar mapa
+    // --------------------------------------------------------
+
+    const validation =
+        validateMap(map);
+
+
+    map.valid =
+        validation.valid;
+
+
+    map.validationErrors =
+        validation.errors;
 
 
     return map;
@@ -135,7 +164,7 @@ function createGrid(map) {
 
 
 // ============================================================
-// GENERAR LAS 6 RUTAS
+// GENERAR RUTAS
 // ============================================================
 
 function generatePaths(
@@ -157,9 +186,9 @@ function generatePaths(
         );
 
 
-    // ========================================================
-    // ELEGIR HABITACIONES INICIALES
-    // ========================================================
+    // --------------------------------------------------------
+    // Elegir habitaciones iniciales diferentes
+    // --------------------------------------------------------
 
     const startingNodes = [];
 
@@ -174,9 +203,6 @@ function generatePaths(
                 firstFloor
             );
 
-
-        // Las habitaciones iniciales
-        // son diferentes.
 
         if (
             !startingNodes.includes(
@@ -193,9 +219,9 @@ function generatePaths(
     }
 
 
-    // ========================================================
-    // CADA HABITACIÓN INICIAL CREA UNA GENERACIÓN
-    // ========================================================
+    // --------------------------------------------------------
+    // Cada habitación inicial genera una ruta
+    // --------------------------------------------------------
 
     for (
         const startNode
@@ -251,13 +277,12 @@ function generatePathFromStart(
             );
 
 
-        // ----------------------------------------------------
-        // Si no encontramos camino directo,
-        // buscamos cualquier candidato válido del siguiente piso.
-        // ----------------------------------------------------
+        let destination = null;
 
-        let destination;
 
+        // ----------------------------------------------------
+        // Primero intentamos utilizar los 3 más cercanos.
+        // ----------------------------------------------------
 
         if (
             validCandidates.length > 0
@@ -269,6 +294,12 @@ function generatePathFromStart(
                 );
 
         }
+
+
+        // ----------------------------------------------------
+        // Si todos cruzan otro camino, intentamos cualquier
+        // habitación disponible del siguiente piso.
+        // ----------------------------------------------------
 
         else {
 
@@ -287,20 +318,28 @@ function generatePathFromStart(
 
 
             if (
-                fallbackCandidates.length === 0
+                fallbackCandidates.length > 0
             ) {
 
-                // Esta generación no puede continuar.
-
-                return;
+                destination =
+                    random.pick(
+                        fallbackCandidates
+                    );
 
             }
 
+        }
 
-            destination =
-                random.pick(
-                    fallbackCandidates
-                );
+
+        // ----------------------------------------------------
+        // Si no existe ningún camino posible, esta ruta muere.
+        // ----------------------------------------------------
+
+        if (
+            !destination
+        ) {
+
+            return false;
 
         }
 
@@ -315,6 +354,9 @@ function generatePathFromStart(
             destination;
 
     }
+
+
+    return true;
 
 }
 
@@ -365,6 +407,10 @@ function getClosestNodes(
         );
 
 
+    // --------------------------------------------------------
+    // Ordenar por distancia horizontal
+    // --------------------------------------------------------
+
     candidates.sort(
         (a, b) => {
 
@@ -397,7 +443,7 @@ function getClosestNodes(
 
 
 // ============================================================
-// COMPROBAR SI SE PUEDE CREAR CAMINO
+// COMPROBAR SI SE PUEDE CREAR UN CAMINO
 // ============================================================
 
 function canCreatePath(
@@ -406,7 +452,7 @@ function canCreatePath(
     to
 ) {
 
-    // No conectarse consigo mismo.
+    // No conectar consigo mismo.
 
     if (
         from.id === to.id
@@ -430,7 +476,7 @@ function canCreatePath(
     }
 
 
-    // Los caminos no pueden cruzarse.
+    // No cruzar caminos existentes.
 
     if (
         pathCrossesExistingPaths(
@@ -491,6 +537,8 @@ function pathCrossesExistingPaths(
             of node.connections
         ) {
 
+            // El boss no es un camino normal.
+
             if (
                 destinationId === "boss"
             ) {
@@ -511,7 +559,9 @@ function pathCrossesExistingPaths(
                 );
 
 
-            if (!pathTo) {
+            if (
+                !pathTo
+            ) {
 
                 continue;
 
@@ -552,7 +602,7 @@ function segmentsCross(
     d
 ) {
 
-    // Compartir un nodo NO cuenta como cruce.
+    // Compartir un extremo no es un cruce.
 
     if (
         a.id === c.id ||
@@ -693,7 +743,7 @@ function removeDisconnectedNodes(
 
 
 // ============================================================
-// ASIGNAR TIPOS
+// ASIGNAR LOCALIZACIONES
 // ============================================================
 
 function assignNodeTypes(
@@ -702,7 +752,7 @@ function assignNodeTypes(
 ) {
 
     // --------------------------------------------------------
-    // Primero asignamos las posiciones obligatorias.
+    // Primero localizaciones obligatorias
     // --------------------------------------------------------
 
     for (
@@ -756,29 +806,44 @@ function assignNodeTypes(
 
 
     // --------------------------------------------------------
-    // Después asignamos el resto.
+    // Asignar el resto por pisos
     // --------------------------------------------------------
 
     for (
-        const node
-        of map.nodes
+        let floor = 1;
+        floor <= map.rows;
+        floor++
     ) {
 
-        if (
-            node.type !== null
+        const nodes =
+            getNodesOnFloor(
+                map,
+                floor
+            );
+
+
+        for (
+            const node
+            of nodes
         ) {
 
-            continue;
+            if (
+                node.type !== null
+            ) {
+
+                continue;
+
+            }
+
+
+            node.type =
+                generateRandomLocation(
+                    map,
+                    node,
+                    random
+                );
 
         }
-
-
-        node.type =
-            generateRandomLocation(
-                map,
-                node,
-                random
-            );
 
     }
 
@@ -786,7 +851,7 @@ function assignNodeTypes(
 
 
 // ============================================================
-// GENERAR LOCALIZACIÓN
+// GENERAR LOCALIZACIÓN ALEATORIA
 // ============================================================
 
 function generateRandomLocation(
@@ -795,15 +860,14 @@ function generateRandomLocation(
     random
 ) {
 
-    let attempts = 0;
+    const maxAttempts = 100;
 
 
-    while (
-        attempts < 100
+    for (
+        let attempt = 0;
+        attempt < maxAttempts;
+        attempt++
     ) {
-
-        attempts++;
-
 
         const type =
             rollLocation(
@@ -826,9 +890,41 @@ function generateRandomLocation(
     }
 
 
-    // Si después de 100 intentos no
-    // encontramos una opción válida,
-    // usamos combate.
+    // --------------------------------------------------------
+    // Fallback
+    // --------------------------------------------------------
+
+    const fallbackTypes = [
+
+        "combat",
+        "event",
+        "elite",
+        "rest",
+        "shop",
+        "chest"
+
+    ];
+
+
+    for (
+        const type
+        of fallbackTypes
+    ) {
+
+        if (
+            isLocationAllowed(
+                map,
+                node,
+                type
+            )
+        ) {
+
+            return type;
+
+        }
+
+    }
+
 
     return "combat";
 
@@ -936,7 +1032,7 @@ function rollLocation(
 
 
 // ============================================================
-// COMPROBAR RESTRICCIONES
+// COMPROBAR LOCALIZACIÓN
 // ============================================================
 
 function isLocationAllowed(
@@ -949,9 +1045,9 @@ function isLocationAllowed(
         mapConfig.restrictions;
 
 
-    // --------------------------------------------------------
-    // ELITE NO PUEDE ESTAR ANTES DEL PISO 6
-    // --------------------------------------------------------
+    // ========================================================
+    // ELITE
+    // ========================================================
 
     if (
         type === "elite" &&
@@ -964,9 +1060,9 @@ function isLocationAllowed(
     }
 
 
-    // --------------------------------------------------------
-    // REST NO PUEDE ESTAR ANTES DEL PISO 6
-    // --------------------------------------------------------
+    // ========================================================
+    // REST
+    // ========================================================
 
     if (
         type === "rest"
@@ -982,8 +1078,6 @@ function isLocationAllowed(
         }
 
 
-        // Rest prohibido en piso 14.
-
         if (
             node.row ===
             restrictions.restForbiddenFloor
@@ -996,10 +1090,9 @@ function isLocationAllowed(
     }
 
 
-    // --------------------------------------------------------
-    // ELITE / SHOP / REST
-    // NO PUEDEN SER CONSECUTIVOS
-    // --------------------------------------------------------
+    // ========================================================
+    // ELITE / SHOP / REST CONSECUTIVOS
+    // ========================================================
 
     const restrictedTypes = [
 
@@ -1044,31 +1137,48 @@ function isLocationAllowed(
     }
 
 
-    // --------------------------------------------------------
+    // ========================================================
     // DESTINOS ÚNICOS
-    // --------------------------------------------------------
+    // ========================================================
     //
-    // Si el nodo tiene varias salidas,
-    // los destinos no pueden compartir
-    // la misma localización.
+    // Si el nodo tiene varias salidas:
     //
-    // En este punto algunos destinos
-    // todavía pueden no tener tipo,
-    // por eso solo comprobamos los
-    // que ya están asignados.
+    //          NODE
+    //          /  \
+    //         /    \
+    //      Elite  Event
     //
+    // válido.
+    //
+    //          NODE
+    //          /  \
+    //         /    \
+    //      Elite  Elite
+    //
+    // inválido.
+    //
+    // ========================================================
 
     if (
         node.connections.length >= 2
     ) {
 
-        const usedTypes = [];
+        const destinationTypes = [];
 
 
         for (
             const destinationId
             of node.connections
         ) {
+
+            if (
+                destinationId === "boss"
+            ) {
+
+                continue;
+
+            }
+
 
             const destination =
                 getNodeById(
@@ -1078,7 +1188,15 @@ function isLocationAllowed(
 
 
             if (
-                !destination ||
+                !destination
+            ) {
+
+                continue;
+
+            }
+
+
+            if (
                 !destination.type
             ) {
 
@@ -1088,7 +1206,7 @@ function isLocationAllowed(
 
 
             if (
-                usedTypes.includes(
+                destinationTypes.includes(
                     destination.type
                 )
             ) {
@@ -1098,18 +1216,15 @@ function isLocationAllowed(
             }
 
 
-            usedTypes.push(
+            destinationTypes.push(
                 destination.type
             );
 
         }
 
 
-        // El propio tipo elegido no puede
-        // coincidir con un destino.
-
         if (
-            usedTypes.includes(
+            destinationTypes.includes(
                 type
             )
         ) {
@@ -1160,8 +1275,7 @@ function createBoss(
 
 
     // --------------------------------------------------------
-    // Todos los nodos del piso 15
-    // conectan con el Boss.
+    // Todos los nodos del piso 15 conectan con el Boss.
     // --------------------------------------------------------
 
     const finalNodes =
@@ -1186,5 +1300,269 @@ function createBoss(
         );
 
     }
+
+}
+
+
+// ============================================================
+// VALIDAR MAPA
+// ============================================================
+
+function validateMap(
+    map
+) {
+
+    const errors = [];
+
+
+    // ========================================================
+    // Debe existir al menos 2 nodos en el piso 1
+    // ========================================================
+
+    const firstFloor =
+        getNodesOnFloor(
+            map,
+            1
+        );
+
+
+    if (
+        firstFloor.length < 2
+    ) {
+
+        errors.push(
+            "El mapa tiene menos de 2 habitaciones iniciales."
+        );
+
+    }
+
+
+    // ========================================================
+    // Debe existir al menos un nodo en piso 15
+    // ========================================================
+
+    const finalFloor =
+        getNodesOnFloor(
+            map,
+            15
+        );
+
+
+    if (
+        finalFloor.length === 0
+    ) {
+
+        errors.push(
+            "El mapa no tiene habitaciones en el piso 15."
+        );
+
+    }
+
+
+    // ========================================================
+    // Comprobar tipos obligatorios
+    // ========================================================
+
+    for (
+        const node
+        of getNodesOnFloor(map, 1)
+    ) {
+
+        if (
+            node.type !== "combat"
+        ) {
+
+            errors.push(
+                `${node.id}: el piso 1 debe ser combat.`
+            );
+
+        }
+
+    }
+
+
+    for (
+        const node
+        of getNodesOnFloor(map, 9)
+    ) {
+
+        if (
+            node.type !== "treasure"
+        ) {
+
+            errors.push(
+                `${node.id}: el piso 9 debe ser treasure.`
+            );
+
+        }
+
+    }
+
+
+    for (
+        const node
+        of getNodesOnFloor(map, 15)
+    ) {
+
+        if (
+            node.type !== "rest"
+        ) {
+
+            errors.push(
+                `${node.id}: el piso 15 debe ser rest.`
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // Comprobar restricciones de cada nodo
+    // ========================================================
+
+    for (
+        const node
+        of map.nodes
+    ) {
+
+        if (
+            !isLocationAllowed(
+                map,
+                node,
+                node.type
+            )
+        ) {
+
+            errors.push(
+                `${node.id}: localización inválida (${node.type}).`
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // Comprobar destinos duplicados
+    // ========================================================
+
+    for (
+        const node
+        of map.nodes
+    ) {
+
+        if (
+            node.connections.length < 2
+        ) {
+
+            continue;
+
+        }
+
+
+        const destinationTypes = [];
+
+
+        for (
+            const destinationId
+            of node.connections
+        ) {
+
+            if (
+                destinationId === "boss"
+            ) {
+
+                continue;
+
+            }
+
+
+            const destination =
+                getNodeById(
+                    map,
+                    destinationId
+                );
+
+
+            if (
+                !destination
+            ) {
+
+                continue;
+
+            }
+
+
+            if (
+                destinationTypes.includes(
+                    destination.type
+                )
+            ) {
+
+                errors.push(
+                    `${node.id}: tiene dos destinos con el mismo tipo.`
+                );
+
+            }
+
+
+            destinationTypes.push(
+                destination.type
+            );
+
+        }
+
+    }
+
+
+    // ========================================================
+    // Comprobar Boss
+    // ========================================================
+
+    if (
+        !map.boss
+    ) {
+
+        errors.push(
+            "El mapa no tiene Boss."
+        );
+
+    }
+
+
+    else {
+
+        for (
+            const node
+            of finalFloor
+        ) {
+
+            if (
+                !node.connections.includes(
+                    "boss"
+                )
+            ) {
+
+                errors.push(
+                    `${node.id}: no está conectado al Boss.`
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return {
+
+        valid:
+            errors.length === 0,
+
+        errors:
+            errors
+
+    };
 
 }
