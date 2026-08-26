@@ -1,5 +1,10 @@
 import { gameState } from "../gameState.js";
 
+import { MapView } from "./views/mapView.js";
+import { CombatView } from "./views/combatView.js";
+import { ShopView } from "./views/shopView.js";
+import { EventView } from "./views/eventView.js";
+
 
 export class GameScreen {
 
@@ -46,16 +51,25 @@ export class GameScreen {
 
             <div class="top-bar">
 
-                <div>
+                <div class="player-hp">
+
                     ❤️
+
                     ${player.hp}
+
                     /
+
                     ${player.maxHp}
+
                 </div>
 
-                <div>
+
+                <div class="player-gold">
+
                     💰
+
                     ${gameState.gold}
+
                 </div>
 
             </div>
@@ -73,21 +87,62 @@ export class GameScreen {
             );
 
 
-        content.innerHTML = `
+        const mapView =
+            new MapView(this);
 
-            <div class="map-view">
 
-                <h1>
-                    Mapa
-                </h1>
+        mapView.render(content);
 
-                <p>
-                    Aquí aparecerá el mapa.
-                </p>
+    }
 
-            </div>
 
-        `;
+    showCombat() {
+
+        const content =
+            document.getElementById(
+                "gameContent"
+            );
+
+
+        const combatView =
+            new CombatView(this);
+
+
+        combatView.render(content);
+
+    }
+
+
+    showShop() {
+
+        const content =
+            document.getElementById(
+                "gameContent"
+            );
+
+
+        const shopView =
+            new ShopView(this);
+
+
+        shopView.render(content);
+
+    }
+
+
+    showEvent() {
+
+        const content =
+            document.getElementById(
+                "gameContent"
+            );
+
+
+        const eventView =
+            new EventView(this);
+
+
+        eventView.render(content);
 
     }
 
