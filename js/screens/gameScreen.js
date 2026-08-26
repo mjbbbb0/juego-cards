@@ -5,49 +5,84 @@ export class GameScreen {
 
     constructor(screenManager) {
 
-        this.screenManager =
-            screenManager;
+        this.screenManager = screenManager;
 
     }
 
 
     render(container) {
 
-        const player =
-            gameState.player;
-
-
         container.innerHTML = `
 
             <div class="game-screen">
 
-                <h1>
-                    Bienvenido,
-                    ${player.name}
-                </h1>
+                <div id="topBar"></div>
+
+                <div id="gameContent"></div>
+
+            </div>
+
+        `;
 
 
-                <div class="player-info">
+        this.renderTopBar();
 
-                    <p>
-                        ❤️ Vida:
-                        ${player.hp}
-                        /
-                        ${player.maxHp}
-                    </p>
+        this.showMap();
+
+    }
 
 
-                    <p>
-                        💰 Oro:
-                        ${gameState.gold}
-                    </p>
+    renderTopBar() {
 
+        const topBar =
+            document.getElementById("topBar");
+
+
+        const player =
+            gameState.player;
+
+
+        topBar.innerHTML = `
+
+            <div class="top-bar">
+
+                <div>
+                    ❤️
+                    ${player.hp}
+                    /
+                    ${player.maxHp}
                 </div>
 
+                <div>
+                    💰
+                    ${gameState.gold}
+                </div>
+
+            </div>
+
+        `;
+
+    }
+
+
+    showMap() {
+
+        const content =
+            document.getElementById(
+                "gameContent"
+            );
+
+
+        content.innerHTML = `
+
+            <div class="map-view">
+
+                <h1>
+                    Mapa
+                </h1>
 
                 <p>
-                    Esta será la pantalla
-                    principal del juego.
+                    Aquí aparecerá el mapa.
                 </p>
 
             </div>
