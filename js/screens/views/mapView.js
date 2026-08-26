@@ -1,4 +1,4 @@
-export class CombatView {
+export class MapView {
 
     constructor(gameScreen) {
 
@@ -11,29 +11,75 @@ export class CombatView {
 
         container.innerHTML = `
 
-            <h1>⚔️ Combate</h1>
+            <div class="map-view">
 
-            <p>
-                Aquí irá el combate.
-            </p>
+                <h1>Mapa</h1>
 
-            <button id="backToMap">
-                Volver al mapa
-            </button>
+                <p>
+                    Este será el mapa de la partida.
+                </p>
+
+                <div class="map-test-buttons">
+
+                    <button id="combatButton">
+                        Combate
+                    </button>
+
+                    <button id="shopButton">
+                        Tienda
+                    </button>
+
+                    <button id="eventButton">
+                        Evento
+                    </button>
+
+                </div>
+
+            </div>
 
         `;
 
 
-        document
-            .getElementById("backToMap")
-            .addEventListener(
-                "click",
-                () => {
+        const combatButton =
+            document.getElementById("combatButton");
 
-                    this.gameScreen.showMap();
 
-                }
-            );
+        combatButton.addEventListener(
+            "click",
+            () => {
+
+                this.gameScreen.showCombat();
+
+            }
+        );
+
+
+        const shopButton =
+            document.getElementById("shopButton");
+
+
+        shopButton.addEventListener(
+            "click",
+            () => {
+
+                this.gameScreen.showShop();
+
+            }
+        );
+
+
+        const eventButton =
+            document.getElementById("eventButton");
+
+
+        eventButton.addEventListener(
+            "click",
+            () => {
+
+                this.gameScreen.showEvent();
+
+            }
+        );
 
     }
 
