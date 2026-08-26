@@ -26,17 +26,24 @@ export class GameScreen {
                     ${player.name}
                 </h1>
 
-                <p>
-                    ❤️
-                    ${player.hp}
-                    /
-                    ${player.maxHp}
-                </p>
 
-                <p>
-                    💰
-                    ${gameState.gold}
-                </p>
+                <div class="player-info">
+
+                    <p>
+                        ❤️ Vida:
+                        ${player.hp}
+                        /
+                        ${player.maxHp}
+                    </p>
+
+
+                    <p>
+                        💰 Oro:
+                        ${gameState.gold}
+                    </p>
+
+                </div>
+
 
                 <p>
                     Esta será la pantalla
