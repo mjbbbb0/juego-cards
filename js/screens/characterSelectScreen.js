@@ -1,4 +1,5 @@
 import { gameState } from "../gameState.js";
+import { GameScreen } from "./gameScreen.js";
 
 
 export class CharacterSelectScreen {
@@ -8,28 +9,12 @@ export class CharacterSelectScreen {
         this.screenManager =
             screenManager;
 
-        this.characters = [];
-
     }
 
 
     async render(container) {
 
-        // Cargar personajes
-
-        const response =
-            await fetch(
-                "./js/data/characters.json"
-            );
-
-
-        const data =
-            await response.json();
-
-
-        this.characters =
-            data.characters;
-
+        // Mostrar pantalla de carga
 
         container.innerHTML = `
 
@@ -40,7 +25,7 @@ export class CharacterSelectScreen {
                 </h1>
 
                 <div id="characters">
-
+                    Cargando personajes...
                 </div>
 
             </div>
@@ -48,81 +33,138 @@ export class CharacterSelectScreen {
         `;
 
 
-        const charactersContainer =
-            document.getElementById(
-                "characters"
-            );
+        try {
 
+            // IMPORTANTE:
+            // data está en la raíz del proyecto,
+            // no dentro de js.
 
-        this.characters.forEach(
-            character => {
-
-                const element =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                element.className =
-                    "character";
-
-
-                element.innerHTML = `
-
-                    <h2>
-                        ${character.name}
-                    </h2>
-
-                    <p>
-                        ${character.description}
-                    </p>
-
-                    <p>
-                        Color:
-                        ${character.color}
-                    </p>
-
-                    <p>
-                        Vida:
-                        ${character.maxHp}
-                    </p>
-
-                    <button>
-                        Elegir
-                    </button>
-
-                `;
-
-
-                const button =
-                    element.querySelector(
-                        "button"
-                    );
-
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        this.selectCharacter(
-                            character
-                        );
-
-                    }
+            const response =
+                await fetch(
+                    "./data/characters.json"
                 );
 
 
-                charactersContainer.appendChild(
-                    element
+            if (!response.ok) {
+
+                throw new Error(
+                    "No se pudo cargar characters.json"
                 );
 
             }
-        );
+
+
+            const data =
+                await response.json();
+
+
+            const charactersContainer =
+                document.getElementById(
+                    "characters"
+                );
+
+
+            charactersContainer.innerHTML = "";
+
+
+            // Crear una tarjeta para cada personaje
+
+            data.characters.forEach(
+                character => {
+
+                    const element =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    element.className =
+                        "character";
+
+
+                    element.innerHTML = `
+
+                        <h2>
+                            ${character.name}
+                        </h2>
+
+                        <p>
+                            ${character.description}
+                        </p>
+
+                        <p>
+                            Color:
+                            ${character.color}
+                        </p>
+
+                        <p>
+                            ❤️
+                            ${character.maxHp}
+                        </p>
+
+                        <button>
+                            Elegir
+                        </button>
+
+                    `;
+
+
+                    const button =
+                        element.querySelector(
+                            "button"
+                        );
+
+
+                    button.addEventListener(
+                        "click",
+                        () => {
+
+                            this.selectCharacter(
+                                character
+                            );
+
+                        }
+                    );
+
+
+                    charactersContainer.appendChild(
+                        element
+                    );
+
+                }
+            );
+
+        }
+        catch (error) {
+
+            console.error(
+                "Error cargando personajes:",
+                error
+            );
+
+
+            document.getElementById(
+                "characters"
+            ).innerHTML = `
+
+                <p>
+                    ❌ Error cargando los personajes.
+                </p>
+
+                <p>
+                    Comprueba la consola del navegador.
+                </p>
+
+            `;
+
+        }
 
     }
 
 
     selectCharacter(character) {
+
+        // Guardar personaje en GameState
 
         gameState.player = {
 
@@ -130,7 +172,8 @@ export class CharacterSelectScreen {
 
             name: character.name,
 
-            description: character.description,
+            description:
+                character.description,
 
             color: character.color,
 
@@ -141,20 +184,17 @@ export class CharacterSelectScreen {
         };
 
 
-        import("./gameScreen.js")
-            .then(module => {
+        // Ir a la pantalla principal
 
-                const screen =
-                    new module.GameScreen(
-                        this.screenManager
-                    );
+        const gameScreen =
+            new GameScreen(
+                this.screenManager
+            );
 
 
-                this.screenManager.show(
-                    screen
-                );
-
-            });
+        this.screenManager.show(
+            gameScreen
+        );
 
     }
 
