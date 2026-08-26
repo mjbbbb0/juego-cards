@@ -1,10 +1,10 @@
 export class MapNode {
 
-    constructor(id, row, column) {
+    constructor(id, floor, column) {
 
         this.id = id;
 
-        this.row = row;
+        this.floor = floor;
 
         this.column = column;
 
@@ -12,9 +12,9 @@ export class MapNode {
 
         this.connections = [];
 
-        this.incomingConnections = [];
-
         this.visited = false;
+
+        this.available = false;
 
     }
 
@@ -24,17 +24,6 @@ export class MapNode {
         if (!this.connections.includes(nodeId)) {
 
             this.connections.push(nodeId);
-
-        }
-
-    }
-
-
-    addIncomingConnection(nodeId) {
-
-        if (!this.incomingConnections.includes(nodeId)) {
-
-            this.incomingConnections.push(nodeId);
 
         }
 
