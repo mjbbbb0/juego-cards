@@ -32,7 +32,7 @@ export class GameScreen {
 
         this.renderTopBar();
 
-        this.showMap();
+        this.renderCurrentView();
 
     }
 
@@ -51,25 +51,16 @@ export class GameScreen {
 
             <div class="top-bar">
 
-                <div class="player-hp">
-
+                <div>
                     ❤️
-
                     ${player.hp}
-
                     /
-
                     ${player.maxHp}
-
                 </div>
 
-
-                <div class="player-gold">
-
+                <div>
                     💰
-
                     ${gameState.gold}
-
                 </div>
 
             </div>
@@ -79,7 +70,7 @@ export class GameScreen {
     }
 
 
-    showMap() {
+    renderCurrentView() {
 
         const content =
             document.getElementById(
@@ -87,62 +78,62 @@ export class GameScreen {
             );
 
 
-        const mapView =
-            new MapView(this);
+        switch (gameState.currentView) {
+
+            case "map":
+
+                new MapView(this)
+                    .render(content);
+
+                break;
 
 
-        mapView.render(content);
+            case "combat":
+
+                new CombatView(this)
+                    .render(content);
+
+                break;
+
+
+            case "shop":
+
+                new ShopView(this)
+                    .render(content);
+
+                break;
+
+
+            case "event":
+
+                new EventView(this)
+                    .render(content);
+
+                break;
+
+
+            default:
+
+                console.error(
+                    "Vista desconocida:",
+                    gameState.currentView
+                );
+
+                gameState.currentView = "map";
+
+                new MapView(this)
+                    .render(content);
+
+        }
 
     }
 
 
-    showCombat() {
+    changeView(view) {
 
-        const content =
-            document.getElementById(
-                "gameContent"
-            );
+        gameState.currentView = view;
 
-
-        const combatView =
-            new CombatView(this);
-
-
-        combatView.render(content);
-
-    }
-
-
-    showShop() {
-
-        const content =
-            document.getElementById(
-                "gameContent"
-            );
-
-
-        const shopView =
-            new ShopView(this);
-
-
-        shopView.render(content);
-
-    }
-
-
-    showEvent() {
-
-        const content =
-            document.getElementById(
-                "gameContent"
-            );
-
-
-        const eventView =
-            new EventView(this);
-
-
-        eventView.render(content);
+        this.renderCurrentView();
 
     }
 
