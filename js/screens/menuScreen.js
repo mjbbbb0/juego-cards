@@ -1,4 +1,6 @@
 import { CharacterSelectScreen } from "./characterSelectScreen.js";
+import { gameState } from "../gameState.js";
+import { generateSeed } from "../rng/seed.js";
 
 
 export class MenuScreen {
@@ -42,6 +44,20 @@ export class MenuScreen {
         newGameButton.addEventListener(
             "click",
             () => {
+
+                // Generar la seed de la partida
+
+                gameState.seed =
+                    generateSeed();
+
+
+                console.log(
+                    "Seed de la partida:",
+                    gameState.seed
+                );
+
+
+                // Ir a selección de personaje
 
                 const characterScreen =
                     new CharacterSelectScreen(
