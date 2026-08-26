@@ -4,56 +4,29 @@ export const mapConfig = {
 
     columns: 7,
 
-
-    // Habitaciones iniciales
     startingRooms: 6,
 
+    maxDestinations: 3,
 
-    // Número de destinos posibles
-    maxNextRooms: 3,
-
-
-    // Probabilidades
     locationOdds: {
-
         combat: 45,
         event: 22,
         elite: 16,
         rest: 12,
         shop: 5,
         chest: 0
-
     },
 
+    specialFloors: {
+        combat: 1,
+        treasure: 9,
+        rest: 15
+    },
 
-    // Pisos especiales
-
-    treasureFloor: 9,
-
-    restFloor: 15,
-
-
-    // No puede haber estos tipos
-    // antes del piso indicado
-
-    minimumEliteFloor: 6,
-
-    minimumRestFloor: 6,
-
-
-    // Descanso no permitido aquí
-
-    restForbiddenFloor: 14,
-
-
-    // Tipos que no pueden ser consecutivos
-
-    nonConsecutiveTypes: [
-
-        "elite",
-        "shop",
-        "rest"
-
-    ]
+    restrictions: {
+        eliteFromFloor: 6,
+        restFromFloor: 6,
+        restForbiddenFloor: 14
+    }
 
 };
