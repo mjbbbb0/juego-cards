@@ -16,8 +16,6 @@ export class MapNode {
 
         this.visited = false;
 
-        this.available = false;
-
     }
 
 
