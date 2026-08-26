@@ -23,8 +23,7 @@ export const mapConfig = {
 
             biomes: [
                 "bosque",
-                "pantano",
-                "ruinas"
+                "mar"
             ]
 
         },
@@ -35,7 +34,6 @@ export const mapConfig = {
             biomes: [
                 "desierto",
                 "ciudad",
-                "cuevas"
             ]
 
         },
@@ -46,7 +44,6 @@ export const mapConfig = {
             biomes: [
                 "fortaleza",
                 "infierno",
-                "nucleo"
             ]
 
         }
