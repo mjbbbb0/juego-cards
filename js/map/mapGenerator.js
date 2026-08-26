@@ -1,4 +1,6 @@
 import { generateGrid } from "./generators/gridGenerator.js";
+import { generatePaths } from "./generators/pathGenerator.js";
+import { cleanNodes } from "./generators/nodeCleaner.js";
 import { mapConfig } from "./mapConfig.js";
 
 
@@ -33,6 +35,27 @@ export function generateMap(
     // ========================================================
 
     generateGrid(
+        map
+    );
+
+
+    // ========================================================
+    // PASO 2
+    // CREAR CAMINOS
+    // ========================================================
+
+    generatePaths(
+        map,
+        random
+    );
+
+
+    // ========================================================
+    // PASO 3
+    // ELIMINAR NODOS DESCONECTADOS
+    // ========================================================
+
+    cleanNodes(
         map
     );
 
