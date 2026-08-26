@@ -1,85 +1,86 @@
+import { gameState } from "../gameState.js";
+
+
 export class MapView {
 
-    constructor(gameScreen) {
+    constructor(screenManager) {
 
-        this.gameScreen = gameScreen;
+        this.screenManager =
+            screenManager;
 
     }
 
 
     render(container) {
 
+        // ====================================================
+        // OBTENER LOS 3 MAPAS
+        // ====================================================
+
+        const map1 =
+            gameState.map[1];
+
+        const map2 =
+            gameState.map[2];
+
+        const map3 =
+            gameState.map[3];
+
+
+        // ====================================================
+        // MOSTRAR LOS MAPAS
+        // ====================================================
+
         container.innerHTML = `
 
             <div class="map-view">
 
-                <h1>Mapa</h1>
+                <h2>
+                    MAPAS GENERADOS
+                </h2>
 
-                <p>
-                    Este será el mapa de la partida.
-                </p>
 
-                <div class="map-test-buttons">
+                <h3>
+                    ACTO 1
+                </h3>
 
-                    <button id="combatButton">
-                        Combate
-                    </button>
+                <pre>
+${JSON.stringify(
+    map1,
+    null,
+    2
+)}
+                </pre>
 
-                    <button id="shopButton">
-                        Tienda
-                    </button>
 
-                    <button id="eventButton">
-                        Evento
-                    </button>
+                <h3>
+                    ACTO 2
+                </h3>
 
-                </div>
+                <pre>
+${JSON.stringify(
+    map2,
+    null,
+    2
+)}
+                </pre>
+
+
+                <h3>
+                    ACTO 3
+                </h3>
+
+                <pre>
+${JSON.stringify(
+    map3,
+    null,
+    2
+)}
+                </pre>
 
             </div>
 
         `;
-
-
-        const combatButton =
-            document.getElementById("combatButton");
-
-
-        combatButton.addEventListener(
-            "click",
-            () => {
-
-                this.gameScreen.showCombat();
-
-            }
-        );
-
-
-        const shopButton =
-            document.getElementById("shopButton");
-
-
-        shopButton.addEventListener(
-            "click",
-            () => {
-
-                this.gameScreen.showShop();
-
-            }
-        );
-
-
-        const eventButton =
-            document.getElementById("eventButton");
-
-
-        eventButton.addEventListener(
-            "click",
-            () => {
-
-                this.gameScreen.showEvent();
-
-            }
-        );
 
     }
 
