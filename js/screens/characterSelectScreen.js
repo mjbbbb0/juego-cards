@@ -89,9 +89,7 @@ export class CharacterSelectScreen {
                         </p>
 
                         <p>
-                            ❤️
-                            ${character.maxHp}
-                            HP
+                            ❤️ ${character.maxHp} HP
                         </p>
 
                         <button class="select-character">
@@ -137,18 +135,14 @@ export class CharacterSelectScreen {
 
             container.innerHTML = `
 
-                <div class="character-select-error">
+                <h1>
+                    Error
+                </h1>
 
-                    <h1>
-                        Error
-                    </h1>
-
-                    <p>
-                        No se pudieron cargar
-                        los personajes.
-                    </p>
-
-                </div>
+                <p>
+                    No se pudieron cargar
+                    los personajes.
+                </p>
 
             `;
 
@@ -159,7 +153,7 @@ export class CharacterSelectScreen {
 
     selectCharacter(character) {
 
-        // Guardamos el personaje seleccionado
+        // Guardar personaje
 
         gameState.player = {
 
@@ -178,27 +172,23 @@ export class CharacterSelectScreen {
         };
 
 
-        // Dinero inicial
+        // Estado inicial de la partida
 
         gameState.gold = 100;
 
-
-        // Por ahora empezamos en el Acto 1
-
         gameState.currentAct = 1;
 
-
-        // Todavía no tenemos bioma
-
         gameState.currentBiome = null;
-
-
-        // Todavía no estamos en ningún nodo
 
         gameState.currentNode = null;
 
 
-        // Crear la pantalla principal de partida
+        // La primera vista de la partida será el mapa
+
+        gameState.currentView = "map";
+
+
+        // Crear GameScreen
 
         const gameScreen =
             new GameScreen(
@@ -206,7 +196,8 @@ export class CharacterSelectScreen {
             );
 
 
-        // Cambiar a la partida
+        // Cambiar de CharacterSelectScreen
+        // a GameScreen
 
         this.screenManager.show(
             gameScreen
