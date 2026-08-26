@@ -1,3 +1,7 @@
+import { gameState } from "../gameState.js";
+import { GameScreen } from "./gameScreen.js";
+
+
 export class CharacterSelectScreen {
 
     constructor(screenManager) {
@@ -85,10 +89,12 @@ export class CharacterSelectScreen {
                         </p>
 
                         <p>
-                            ❤️ ${character.maxHp}
+                            ❤️
+                            ${character.maxHp}
+                            HP
                         </p>
 
-                        <button>
+                        <button class="select-character">
                             Elegir
                         </button>
 
@@ -97,7 +103,7 @@ export class CharacterSelectScreen {
 
                     const button =
                         card.querySelector(
-                            "button"
+                            ".select-character"
                         );
 
 
@@ -131,14 +137,18 @@ export class CharacterSelectScreen {
 
             container.innerHTML = `
 
-                <h1>
-                    Error
-                </h1>
+                <div class="character-select-error">
 
-                <p>
-                    No se pudieron cargar
-                    los personajes.
-                </p>
+                    <h1>
+                        Error
+                    </h1>
+
+                    <p>
+                        No se pudieron cargar
+                        los personajes.
+                    </p>
+
+                </div>
 
             `;
 
@@ -149,9 +159,57 @@ export class CharacterSelectScreen {
 
     selectCharacter(character) {
 
-        console.log(
-            "Personaje seleccionado:",
-            character
+        // Guardamos el personaje seleccionado
+
+        gameState.player = {
+
+            id: character.id,
+
+            name: character.name,
+
+            description: character.description,
+
+            color: character.color,
+
+            maxHp: character.maxHp,
+
+            hp: character.maxHp
+
+        };
+
+
+        // Dinero inicial
+
+        gameState.gold = 100;
+
+
+        // Por ahora empezamos en el Acto 1
+
+        gameState.currentAct = 1;
+
+
+        // Todavía no tenemos bioma
+
+        gameState.currentBiome = null;
+
+
+        // Todavía no estamos en ningún nodo
+
+        gameState.currentNode = null;
+
+
+        // Crear la pantalla principal de partida
+
+        const gameScreen =
+            new GameScreen(
+                this.screenManager
+            );
+
+
+        // Cambiar a la partida
+
+        this.screenManager.show(
+            gameScreen
         );
 
     }
