@@ -13,69 +13,74 @@ export class MapView {
 
     render(container) {
 
-        // ====================================================
-        // OBTENER LOS 3 MAPAS
-        // ====================================================
+        const maps =
+            gameState.map || {};
+
 
         const map1 =
-            gameState.map[1];
+            maps[1] || null;
 
         const map2 =
-            gameState.map[2];
+            maps[2] || null;
 
         const map3 =
-            gameState.map[3];
+            maps[3] || null;
 
-
-        // ====================================================
-        // MOSTRAR LOS MAPAS
-        // ====================================================
 
         container.innerHTML = `
 
             <div class="map-view">
 
-                <h2>
+                <h1>
                     MAPAS GENERADOS
+                </h1>
+
+
+                <h2>
+                    ACTO 1
                 </h2>
 
-
-                <h3>
-                    ACTO 1
-                </h3>
-
                 <pre>
-${JSON.stringify(
-    map1,
-    null,
-    2
-)}
+${map1
+    ? JSON.stringify(
+        map1,
+        null,
+        2
+    )
+    : "Mapa del Acto 1 no generado."
+}
                 </pre>
 
 
-                <h3>
+                <h2>
                     ACTO 2
-                </h3>
+                </h2>
 
                 <pre>
-${JSON.stringify(
-    map2,
-    null,
-    2
-)}
+${map2
+    ? JSON.stringify(
+        map2,
+        null,
+        2
+    )
+    : "Mapa del Acto 2 no generado."
+}
                 </pre>
 
 
-                <h3>
+                <h2>
                     ACTO 3
-                </h3>
+                </h2>
 
                 <pre>
-${JSON.stringify(
-    map3,
-    null,
-    2
-)}
+${map3
+    ? JSON.stringify(
+        map3,
+        null,
+        2
+    )
+    : "Mapa del Acto 3 no generado."
+}
                 </pre>
 
             </div>
