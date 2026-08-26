@@ -1,11 +1,21 @@
-import { showScreen } from "./screens/screenManager.js";
-import { createMenuScreen } from "./screens/menuScreen.js";
+import { ScreenManager } from "./screens/ScreenManager.js";
+import { MenuScreen } from "./screens/menuScreen.js";
 
 
-// ========================================
-// INICIAR JUEGO
-// ========================================
+const app =
+    document.getElementById("app");
 
-const menuScreen = createMenuScreen();
 
-showScreen(menuScreen);
+const screenManager =
+    new ScreenManager(app);
+
+
+const menuScreen =
+    new MenuScreen(
+        screenManager
+    );
+
+
+screenManager.show(
+    menuScreen
+);
