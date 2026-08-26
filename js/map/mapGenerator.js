@@ -1,4 +1,5 @@
 import { generateGrid } from "./generators/gridGenerator.js";
+import { mapConfig } from "./mapConfig.js";
 
 
 export function generateMap(
@@ -13,9 +14,9 @@ export function generateMap(
 
         biome: biome,
 
-        rows: 15,
+        rows: mapConfig.rows,
 
-        columns: 7,
+        columns: mapConfig.columns,
 
         nodes: [],
 
