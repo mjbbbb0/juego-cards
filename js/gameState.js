@@ -14,7 +14,7 @@ export const gameState = {
 
     seed: null,
 
-    map: null,
+    map: [],
 
     deck: [],
 
