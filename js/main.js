@@ -1,34 +1,13 @@
-const app = document.getElementById("app");
-
-app.innerHTML = `
-    <h1>Mi Roguelike</h1>
-
-    <p>El juego funciona correctamente.</p>
-
-    <button id="newGameButton">
-        Nueva partida
-    </button>
-
-    <button id="continueButton">
-        Continuar partida
-    </button>
-`;
-
-const newGameButton =
-    document.getElementById("newGameButton");
-
-newGameButton.addEventListener("click", () => {
-
-    alert("Nueva partida");
-
-});
+import { ScreenManager } from "./screens/ScreenManager.js";
 
 
-const continueButton =
-    document.getElementById("continueButton");
+// Contenedor principal del juego
 
-continueButton.addEventListener("click", () => {
+const app =
+    document.getElementById("app");
 
-    alert("Continuar partida");
 
-});
+// Crear el gestor de pantallas
+
+const screenManager =
+    new ScreenManager(app);
